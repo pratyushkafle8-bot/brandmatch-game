@@ -47,6 +47,27 @@ const SUPABASE_KEY = "sb_publishable_AtDbdU1ZOJsgCDJzbTBoUw_45BhA84z";
   SUPABASE_URL,
   SUPABASE_KEY
 );
+ async function signInBrandMatchPlayer() {
+  const { data: sessionData } =
+    await supabaseClient.auth.getSession();
+
+  if (sessionData.session) {
+    return sessionData.session.user;
+  }
+
+  const { data, error } =
+    await supabaseClient.auth.signInAnonymously();
+
+  if (error) {
+    console.error("Sign-in failed:", error.message);
+    alert("Could not connect to multiplayer. Please try again.");
+    return null;
+  }
+
+  return data.user;
+}
+
+signInBrandMatchPlayer();
 (()=> {
 const DEFAULTS=(()=>{try{return JSON.parse(document.getElementById("brandmatch-embedded-config").textContent)}catch(e){return {"name": "BrandMatch", "headline": "Match. Score. Get rewarded.", "description": "Swap matching products and reach the target before you run out of moves.", "logo": "✦", "color": "#7657ff", "products": ["🍓", "💎", "🍋", "🫐", "🍀", "🍊"], "rewardTitle": "A little treat for you", "button": "VIEW OFFER", "rewardText": "Show this offer at checkout. Ask the business for current terms."}}})();
 let config={...DEFAULTS,products:[...DEFAULTS.products]};
